@@ -25,13 +25,13 @@ function Login() {
                         <form>
                             <div data-mdb-input-init className="form-outline mb-4" >
                                 <label className="form-label" htmlFor="email">Email address</label>
-                                <input type="email" id="email" value={userId} onChange={handleOnChange} className="form-control form-control-lg"
+                                <input type="email" required id="email" value={userId} onChange={handleOnChange} className="form-control form-control-lg"
                                     placeholder="Enter a valid email address" />
                             </div>
 
                             <div data-mdb-input-init className="form-outline mb-3">
                                 <label className="form-label" htmlFor="password">Password</label>
-                                <input type="password" id="password" className="form-control form-control-lg"
+                                <input type="password" required id="password" className="form-control form-control-lg"
                                     placeholder="Enter password" />
                             </div>
 

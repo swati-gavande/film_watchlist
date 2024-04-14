@@ -1,34 +1,46 @@
 
 import './App.css';
-import Add from './components/Search';
+import Search from './components/Search';
 import Info from "./components/Info";
 import NavBar from "./components/NavBar";
-import React from 'react'
+import React, { useContext } from 'react'
 import Watchlist from './components/Watchlist';
-import { GlobalProvider } from './contexts/GlobalProvider';
+import { GlobalContext, GlobalProvider } from './contexts/GlobalProvider';
 import Watched from './components/Watched';
 import {
   BrowserRouter,
   Routes,
-  Route
+  Route,
+  Navigate
 } from "react-router-dom";
-
+import Home from './components/Home';
+import Login from './components/Login';
 
 export default function App() {
-  return (
+  // State to handle login & logout
+  const { user,currSession } = useContext(GlobalContext);
+  var loggedIn = false;
+  user.forEach(element => {
+    if (element.userid === currSession) {
+      loggedIn = element.islogged;
+    }
+  });
 
+  return (
     <GlobalProvider>
       <div className="App">
         <BrowserRouter>
-          <NavBar />
+          <NavBar status={loggedIn} userid={currSession} />
           <Info />
           <Routes>
-            <Route exact path="/search" element={<Add />} />
-            <Route exact path="/watchlist" element={<Watchlist />} />
-            <Route exact path="/watched" element={<Watched />} />
+            <Route exact path="/" element={<Home />} />
+            <Route exact path="/login" element={<Login />} />
+            <Route exact path="/search" element={!loggedIn ? <Navigate replace to="/" /> : <Search />} />
+            <Route exact path="/watchlist" element={!loggedIn ? <Navigate replace to="/" /> : <Watchlist />} />
+            <Route exact path="/watched" element={!loggedIn ? <Navigate replace to="/" /> : <Watched />} />
           </Routes>
         </BrowserRouter>
-      </div >
+      </div>
     </GlobalProvider>
   )
 }

@@ -2,11 +2,10 @@ import React, { useContext } from 'react';
 import { GlobalContext } from '../contexts/GlobalProvider';
 
 export default function Movie(props) {
-    let { title, plot, poster, year, ratimdbRating, imdbID } = props.data;
-
+    let { title, plot, poster, year, ratimdbRating, imdbID,userid } = props.data;
     const { addMovieToWatchlist, addMovieToWatched, watchlist, watched } = useContext(GlobalContext);
-    let storedMovie = watchlist.find(o => o.imdbID === imdbID);
-    let storedMovieWatched = watched.find(o => o.imdbID === imdbID);
+    let storedMovie = watchlist.find(o => (o.imdbID === imdbID && o.userid === userid));
+    let storedMovieWatched = watched.find((o => o.imdbID === imdbID && o.userid === userid));
 
     const watchlistDisabled = storedMovie ? true : storedMovieWatched ? true : false;
 
@@ -37,7 +36,7 @@ export default function Movie(props) {
 
                         <button className="btn btn-outline-success mx-2" type="button"
                             disabled={watchedDisabled}
-                            onClick={() => addMovieToWatched(props.Data)}
+                            onClick={() => addMovieToWatched(props.data)}
                         >Add to Watched</button>
                     </div>
                 </div>

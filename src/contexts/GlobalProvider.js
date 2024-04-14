@@ -1,22 +1,26 @@
-import React, {createContext,useReducer,useEffect} from "react";
+import React, { createContext, useReducer, useEffect } from "react";
 import AppReducer from "./AppReducer";
 
 // initial state
-const initialState={
+const initialState = {
+    user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : [],
     watchlist: localStorage.getItem('watchlist') ? JSON.parse(localStorage.getItem('watchlist')) : [],
-    watched: localStorage.getItem('watched') ? JSON.parse(localStorage.getItem('watched')) : []
+    watched: localStorage.getItem('watched') ? JSON.parse(localStorage.getItem('watched')) : [],
+    currSession: localStorage.getItem('currSession') ? localStorage.getItem('currSession') : " ",
 }
 
 // create Context
-export const GlobalContext=createContext(initialState);
+export const GlobalContext = createContext(initialState);
 
 // provider components
 
-export const GlobalProvider=props=>{
-    const [state,dispatch]=useReducer(AppReducer,initialState);
+export const GlobalProvider = props => {
+    const [state, dispatch] = useReducer(AppReducer, initialState);
     useEffect(() => {
+        localStorage.setItem('user', JSON.stringify(state.user));
         localStorage.setItem('watchlist', JSON.stringify(state.watchlist));
         localStorage.setItem('watched', JSON.stringify(state.watched));
+        localStorage.setItem('currSession', state.currSession);
     }, [state]);
 
     //actions
@@ -40,16 +44,28 @@ export const GlobalProvider=props=>{
         dispatch({ type: "REMOVE_MOVIE_FROM_WATCHED", payload: id });
     };
 
+    const updateUserDetails = user => {
+        dispatch({ type: "UPDATE_USER", payload: user });
+    }
+
+    const logoutUser = id => {
+        dispatch({ type: "LOGOUT_USER", payload: id });
+    }
+
     return (
         <GlobalContext.Provider
             value={{
+                user: state.user,
                 watchlist: state.watchlist,
                 watched: state.watched,
+                currSession:state.currSession,
                 addMovieToWatchlist,
                 removeMovieFromWatchlist,
                 addMovieToWatched,
                 moveToWatchlist,
-                removeFromWatched
+                removeFromWatched,
+                updateUserDetails,
+                logoutUser
             }}
         >
             {props.children}

@@ -9,6 +9,7 @@ export default function Add() {
         setQuery(e.target.value);
     }
 
+    let currSession = localStorage.getItem("currSession");
     // Function to  search movies on change event
     const handleOnClick = (e) => {
         e.preventDefault();
@@ -17,7 +18,9 @@ export default function Add() {
             .then((res) => res.json())
             .then((data) => {
                 if (data.Response === "True") {
-                    setMoviewResult({ "title": data.Title, "plot": data.Plot, "poster": data.Poster, "year": data.Year,"ratimdbRating":data.imdbRating,'imdbID':data.imdbID });
+                    setMoviewResult({
+                        "userid": currSession, "title": data.Title, "plot": data.Plot, "poster": data.Poster, "year": data.Year, "ratimdbRating": data.imdbRating, 'imdbID': data.imdbID
+                    });
                 }
             })
     }
@@ -38,7 +41,7 @@ export default function Add() {
             </div>
 
             <div className='container'>
-                {Object.keys(movieResult).length>0 && <Movie data={movieResult} />}
+                {Object.keys(movieResult).length > 0 && <Movie data={movieResult} />}
             </div>
         </div>
         // </div>

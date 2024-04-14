@@ -36,6 +36,21 @@ export default function AppReducer(state, action) {
                     (movie) => movie.imdbID !== action.payload)
             }
 
+        case "UPDATE_USER":
+            return {
+                ...state,
+                user: [action.payload, ...state.user],
+                currSession:action.payload.userid
+            }
+
+        case "LOGOUT_USER":
+            return {
+                ...state,
+                user: state.user.filter(
+                    (us) => us.userid !== action.payload.userid),
+                currSession: " "
+            }
+
         default:
             return state;
     }
